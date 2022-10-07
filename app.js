@@ -2,7 +2,10 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const userRouter = require('./router/user')
-const joi = require('joi')
+const userInfoRouter = require('./router/userInfo')
+const joi = require('@hapi/joi')
+const config = require('./config')
+const expressJwt = require('express-jwt')
 
 //自定义log中间件
 app.use(function (req, res, next) {
@@ -20,16 +23,22 @@ app.use(cors())
 // 使用的是 express 内置的中间件，只能解析 www 形式的表单数据
 app.use(express.urlencoded({ extended: false }))
 app.use('/api', userRouter)
+app.use('/api', userInfoRouter)
+app.use(
+    expressJwt
+        .expressjwt({ secret: config.jwtSecretKey, algorithms: ['HS256'] })
+        .unless({
+            path: [/^\/api\//],
+        })
+)
 
 // 定义错误级别中间件
-// app.use((err, req, res, next) => {
-//     if (err instanceof joi.ValidationError) {
-//         return res.cc('校验时发生的错误')
-//     }
-// })
 app.use((err, req, res, next) => {
     if (err instanceof joi.ValidationError) {
         return res.cc(err)
+    }
+    if (err.name === 'UnauthorizedError') {
+        return res.cc('身份认证失败！')
     }
     if (err.name === 'UnauthorizedError') {
         return res.cc('身份认证失败！')
