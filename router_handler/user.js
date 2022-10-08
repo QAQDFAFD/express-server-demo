@@ -2,8 +2,9 @@ const db = require('../db/index')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const config = require('../config')
+
 // 注册的处理函数
-exports.regUser = (req, res) => {
+exports.register = (req, res) => {
     const userInfo = req.body
     // 判断用户名是否合法
     // 以下的代码已经使用expressJoi和joi中间件取代

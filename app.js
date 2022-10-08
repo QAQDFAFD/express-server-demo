@@ -3,6 +3,7 @@ const app = express()
 const cors = require('cors')
 const userRouter = require('./router/user')
 const userInfoRouter = require('./router/userInfo')
+const articleRouter = require('./router/article')
 const joi = require('@hapi/joi')
 const config = require('./config')
 const expressJwt = require('express-jwt')
@@ -22,8 +23,7 @@ app.use(cors())
 // 解析表单数据
 // 使用的是 express 内置的中间件，只能解析 www 形式的表单数据
 app.use(express.urlencoded({ extended: false }))
-app.use('/api', userRouter)
-app.use('/api', userInfoRouter)
+
 app.use(
     expressJwt
         .expressjwt({ secret: config.jwtSecretKey, algorithms: ['HS256'] })
@@ -32,6 +32,9 @@ app.use(
         })
 )
 
+app.use('/api', userRouter)
+app.use('/my', userInfoRouter)
+app.use('/my/article', articleRouter)
 // 定义错误级别中间件
 app.use((err, req, res, next) => {
     if (err instanceof joi.ValidationError) {
