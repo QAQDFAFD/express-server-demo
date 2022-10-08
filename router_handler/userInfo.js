@@ -67,7 +67,7 @@ exports.changePwd = (req, res) => {
                         res.cc(err)
                     }
                     if (resultss.affectedRows !== 1) {
-                        return res.cc('修改密码失败2')
+                        return res.cc('修改密码失败')
                     }
                     res.send({
                         code: 200,

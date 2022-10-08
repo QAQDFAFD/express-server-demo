@@ -17,6 +17,15 @@ const oldPwd = joi
     .required()
 const newPwd = joi.not(joi.ref('oldPwd')).concat(password)
 const imgUrl = joi.string().required()
+const name = joi.string().required()
+const alias = joi.string().alphanum().required()
+
+// 关于增加文章的数据
+const title = joi.string().required()
+const cate_id = joi.number().integer().min(1).required()
+const content = joi.string().required().allow('')
+const state = joi.string().valid('已发布', '草稿').required()
+
 // 定义验证注册和登录表单数据的规则对象
 exports.reg_login_schema = {
     body: {
@@ -44,5 +53,27 @@ exports.change_avator = {
     body: {
         imgUrl,
         username,
+    },
+}
+
+exports.add_cates = {
+    body: {
+        name,
+        alias,
+    },
+}
+
+exports.delete_cates = {
+    body: {
+        name,
+    },
+}
+
+exports.add_article = {
+    body: {
+        title,
+        cate_id,
+        content,
+        state,
     },
 }
