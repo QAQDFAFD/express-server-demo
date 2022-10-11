@@ -2,7 +2,7 @@ const express = require('express')
 const userInfoHandler = require('../router_handler/userInfo')
 const expressJoi = require('@escook/express-joi')
 const {
-    updata_userInfo_schema,
+    update_userInfo_schema,
     change_password_schema,
     change_avator,
 } = require('../schema/user')
@@ -16,7 +16,7 @@ router.get('/userInfo', userInfoHandler.getuserInfo)
 // 更新用户信息的接口
 router.post(
     '/updateUserInfo',
-    expressJoi(updata_userInfo_schema),
+    expressJoi(update_userInfo_schema),
     userInfoHandler.updateUserInfo
 )
 
